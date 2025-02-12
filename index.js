@@ -23,10 +23,10 @@ app.get("/users", (req, res) => {
   res.status(200).json({ users });
 });
 
-app.use((req, res) => {
+app.get("/:id", (req, res) => {
   res.status(404).json({
-    Status: "not found",
-    Message: "Route tidak ditemukan",
+    status: "not found",
+    message: "Route tidak ditemukan",
   });
 });
 
