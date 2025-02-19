@@ -1,32 +1,43 @@
 const express = require("express");
 const users = require("./users");
 const moment = require("moment");
+const morgan = require("morgan");
 
 const app = express();
 const port = 3000;
 const hostname = "127.0.0.1";
 
+const log = (req, res, next) => {
+  console.log(
+    moment().format("h:mm:ss a") + " " + req.originalUrl + " " + req.ip
+  );
+  next();
+};
+
+app.use(morgan("tiny"));
+
 app.get("/", (req, res) => {
   res.status(200).json("This is the Home Page");
-});
-
-app.get("/about", (req, res) => {
-  res.status(200).json({
-    Status: "success",
-    Message: "response success",
-    Description: "Exercise #03",
-    Date: moment().format(),
-  });
 });
 
 app.get("/users", (req, res) => {
   res.status(200).json({ users });
 });
+app.get("/users/:name", (req, res) => {
+  const name = req.params.name.toLowerCase();
+  const user = users.find((user) => user.name.toLowerCase() === name);
 
-app.get("/:id", (req, res) => {
+  if (user) {
+    res.status(200).json(user);
+  } else {
+    res.status(404).json({ message: "Data users tidak ditemukan" });
+  }
+});
+
+app.use((req, res, next) => {
   res.status(404).json({
-    status: "not found",
-    message: "Route tidak ditemukan",
+    status: "error",
+    message: "resource tidak ditemukan",
   });
 });
 
