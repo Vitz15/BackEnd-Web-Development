@@ -40,6 +40,12 @@ app.use((req, res, next) => {
     message: "resource tidak ditemukan",
   });
 });
+app.use((err, req, res, next) => {
+  res.status(500).json({
+    status: "error",
+    message: err.message || "Terjadi kesalahan pada server",
+  });
+});
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}`);
