@@ -54,7 +54,7 @@ routers.get("/users:id", async (req, res) => {
   }
 });
 
-// post user
+// insert user
 routers.post("/users", async (req, res) => {
   try {
     const db = client.db("latihan");
